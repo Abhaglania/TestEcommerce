@@ -1,61 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:orientation="vertical"
-              android:padding="10dp"
-              android:background="?android:attr/selectableItemBackground"
-              android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
 
     <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-
-            android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TextView
-                android:layout_width="wrap_content"
-                android:text="Color"
-                android:textColor="#000"
-                android:id="@+id/textViewVariantColor"
-                android:layout_height="wrap_content"/>
-
-        <View
-                android:layout_marginLeft="10dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="#c1b2b2"/>
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/textViewVariantColor"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:text="Color"
+            android:textColor="#000" />
 
         <TextView
 
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:text="Price"
-                android:textColor="#000"
-                android:id="@+id/textViewVariantPrice"
-                android:layout_height="wrap_content"/>
+            android:id="@+id/textViewVariantPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Price"
+            android:textColor="#000" />
 
         <TextView
 
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:text="Size"
-                android:textColor="#000"
-                android:id="@+id/textViewVariantSize"
-                android:layout_height="wrap_content"/>
+            android:id="@+id/textViewVariantSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Size"
+            android:textColor="#000" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="?android:attr/selectableItemBackground"
+            app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
     </LinearLayout>
 
     <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="2dp"
-            android:background="#eee"/>
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="3dp"
+        android:background="#eee" />
 </LinearLayout>

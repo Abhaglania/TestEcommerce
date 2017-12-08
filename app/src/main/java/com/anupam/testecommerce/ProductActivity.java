@@ -28,19 +28,7 @@ public class ProductActivity extends AppCompatActivity {
         addProductToView();
     }
 
-    private Product getProductDummy(int productId) {
-        Product product = new Product();
-        product.setDate_added("2016-12-09T11:16:11.000Z");
-        product.setId(12);
-        product.setName("Dummy");
 
-        Tax tax = new Tax();
-        tax.setName("qwe");
-        tax.setValue(12);
-        product.setTax(tax);
-        product.setVariants(SelectVariantActivity.getVariantDataDummy(1));
-        return product;
-    }
 
     private void addProductToView() {
         TextView textViewName = (TextView) findViewById(R.id.textViewName);
@@ -108,9 +96,13 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 101) {
-            ProductVariant variant = (ProductVariant) data.getSerializableExtra("variant");
-            addSelectedVariant(variant);
+        if (requestCode == 101&&resultCode==200) {
+            try {
+                ProductVariant variant = (ProductVariant) data.getSerializableExtra("variant");
+                addSelectedVariant(variant);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
