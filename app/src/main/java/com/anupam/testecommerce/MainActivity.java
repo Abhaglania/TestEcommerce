@@ -3,6 +3,8 @@ package com.anupam.testecommerce;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.anupam.testecommerce.myutils.DownloadDataTask;
+
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements DownloadDataTask.TaskCallback {
@@ -16,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements DownloadDataTask.
 
     @Override
     public void onResultReceived(JSONObject result) {
-        
+
     }
 
     @Override

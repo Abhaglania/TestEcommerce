@@ -1,4 +1,4 @@
-package com.anupam.testecommerce;
+package com.anupam.testecommerce.myutils;
 
 
 import android.os.AsyncTask;
