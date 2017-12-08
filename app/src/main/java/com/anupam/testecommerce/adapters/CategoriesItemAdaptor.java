@@ -60,6 +60,7 @@ public class CategoriesItemAdaptor extends BaseAdapter {
                 int id = (int) view.getTag();
                 Intent intent = new Intent(context, ProductActivity.class);
                 intent.putExtra("productId", id);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });

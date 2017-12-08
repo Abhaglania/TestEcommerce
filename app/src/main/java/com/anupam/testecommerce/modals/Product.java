@@ -1,16 +1,14 @@
 package com.anupam.testecommerce.modals;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Product {
+public class Product implements Serializable {
     int id;
     String name;
-    String tax;
-    String Date;
+    Tax tax;
+    String date_added;
 
     ArrayList<ProductVariant> variants = new ArrayList<>();
 
@@ -31,19 +29,19 @@ public class Product {
     }
 
     public String getTax() {
-        return tax;
+        return tax.toString();
     }
 
-    public void setTax(String tax) {
+    public void setTax(Tax tax) {
         this.tax = tax;
     }
 
-    public String getDate() {
-        return Date;
+    public String getDate_added() {
+        return date_added;
     }
 
-    public void setDate(String date) {
-        Date = date;
+    public void setDate_added(String date_added) {
+        this.date_added = date_added;
     }
 
     public ArrayList<ProductVariant> getVariants() {

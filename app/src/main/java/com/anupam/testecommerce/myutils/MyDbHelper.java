@@ -10,6 +10,7 @@ import android.util.Log;
 import com.anupam.testecommerce.modals.Category;
 import com.anupam.testecommerce.modals.Product;
 import com.anupam.testecommerce.modals.ProductVariant;
+import com.anupam.testecommerce.modals.Tax;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 
 public class MyDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "ecommerce";
     private static final String TABLE_MOST_VIEW_PRODUCTS = "most_view_products";
     private static final String COLUMN_NAME_KEY = "id";
@@ -81,7 +82,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
                     " ( " +
                     COLUMN_NAME_PRODUCTS_ID + " INTEGER NOT NULL, " +
                     COLUMN_NAME_PRODUCTS_NAME + " TEXT NOT NULL, " +
-                    COLUMN_NAME_PRODUCTS_DATE_ADDED + " TEXT NOT NULL, " +
+                    COLUMN_NAME_PRODUCTS_DATE_ADDED + " TEXT , " +
                     COLUMN_NAME_PRODUCTS_TAX + " TEXT NOT NULL, " +
                     COLUMN_NAME_PRODUCTS_CATEGORIES_ID + " TEXT NOT NULL, " +
                     " PRIMARY KEY ( " + COLUMN_NAME_PRODUCTS_ID + " ) " +
@@ -137,7 +138,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_TABLE_MSP);
         sqLiteDatabase.execSQL(SQL_CREATE_TABLE_PRODUCTS);
         sqLiteDatabase.execSQL(SQL_CREATE_TABLE_CATEGORIES);
-        sqLiteDatabase.close();
+        //sqLiteDatabase.close();
     }
 
     @Override
@@ -220,13 +221,13 @@ public class MyDbHelper extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(COLUMN_NAME_PRODUCTS_ID, product.getId());
             values.put(COLUMN_NAME_PRODUCTS_NAME, product.getName());
-            values.put(COLUMN_NAME_PRODUCTS_DATE_ADDED, product.getDate());
-            values.put(COLUMN_NAME_PRODUCTS_TAX, product.getTax());
+            values.put(COLUMN_NAME_PRODUCTS_DATE_ADDED, product.getDate_added());
+            values.put(COLUMN_NAME_PRODUCTS_TAX, product.getTax().toString());
             values.put(COLUMN_NAME_PRODUCTS_CATEGORIES_ID, categoryId);
 
             long newRowId;
             newRowId = sqLiteDatabase.insert(
-                    TABLE_VARIANTS,
+                    TABLE_PRODUCTS,
                     null,
                     values);
 
@@ -364,8 +365,10 @@ public class MyDbHelper extends SQLiteOpenHelper {
                 int id = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_PRODUCTS_ID));
                 product.setId(id);
                 product.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PRODUCTS_NAME)));
-                product.setTax(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PRODUCTS_TAX)));
-                product.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PRODUCTS_DATE_ADDED)));
+                Gson gson = new GsonBuilder().create();
+                Tax tax = gson.fromJson(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PRODUCTS_TAX)), Tax.class);
+                product.setTax(tax);
+                product.setDate_added(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PRODUCTS_DATE_ADDED)));
                 product.setVariants(getVariantsByProductId(id));
                 return product;
             }
@@ -409,8 +412,10 @@ public class MyDbHelper extends SQLiteOpenHelper {
                 int id = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_PRODUCTS_ID));
                 product.setId(id);
                 product.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PRODUCTS_NAME)));
-                product.setTax(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PRODUCTS_TAX)));
-                product.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PRODUCTS_DATE_ADDED)));
+                Gson gson = new GsonBuilder().create();
+                Tax tax = gson.fromJson(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PRODUCTS_TAX)), Tax.class);
+                product.setTax(tax);
+                product.setDate_added(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PRODUCTS_DATE_ADDED)));
 
                 product.setVariants(getVariantsByProductId(id));
 

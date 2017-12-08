@@ -7,9 +7,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.anupam.testecommerce.adapters.HorizontalCategoriesAdaptor;
+import com.anupam.testecommerce.modals.Category;
 import com.anupam.testecommerce.myutils.DownloadDataTask;
 import com.anupam.testecommerce.myutils.MyDbHelper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements DownloadDataTask.TaskCallback {
@@ -34,8 +37,6 @@ public class MainActivity extends AppCompatActivity implements DownloadDataTask.
     private void addCatogoriesToView() {
         MyDbHelper myDbHelper = new MyDbHelper(getApplicationContext());
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.categories);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        // recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
         HorizontalCategoriesAdaptor rAdapter = new HorizontalCategoriesAdaptor(getApplicationContext(), myDbHelper.getCategories());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -44,7 +45,25 @@ public class MainActivity extends AppCompatActivity implements DownloadDataTask.
 
     @Override
     public void onResultReceived(JSONObject result) {
-
+        try {
+            MyDbHelper myDbHelper = new MyDbHelper(getApplicationContext());
+            JSONArray jsonArray = result.getJSONArray("categories");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                int id = jsonObject.optInt("id", 0);
+                String name = jsonObject.optString("name", "");
+                JSONArray productJsonArray = jsonObject.getJSONArray("products");
+                Category category = new Category();
+                category.setName(name);
+                category.setId(id);
+                category.setChild(jsonObject.getJSONArray("child_categories"));
+                myDbHelper.insertCategory(category, productJsonArray);
+                myDbHelper.close();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        addCatogoriesToView();
     }
 
     @Override

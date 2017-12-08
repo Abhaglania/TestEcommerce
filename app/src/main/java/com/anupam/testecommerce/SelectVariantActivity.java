@@ -26,7 +26,7 @@ public class SelectVariantActivity extends AppCompatActivity {
             return;
         }
 
-        ArrayList<ProductVariant> variants = getVariantDataDummy(productId);
+        ArrayList<ProductVariant> variants = getVariantData(productId);
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.variants);
         for (ProductVariant variant : variants) {
             try {

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.anupam.testecommerce.modals.Product;
 import com.anupam.testecommerce.modals.ProductVariant;
+import com.anupam.testecommerce.modals.Tax;
 import com.anupam.testecommerce.myutils.MyDbHelper;
 
 import org.json.JSONException;
@@ -29,17 +30,14 @@ public class ProductActivity extends AppCompatActivity {
 
     private Product getProductDummy(int productId) {
         Product product = new Product();
-        product.setDate("2016-12-09T11:16:11.000Z");
+        product.setDate_added("2016-12-09T11:16:11.000Z");
         product.setId(12);
         product.setName("Dummy");
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("tax", "VAT");
-            jsonObject.put("value", 12);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        product.setTax(jsonObject.toString());
+
+        Tax tax = new Tax();
+        tax.setName("qwe");
+        tax.setValue(12);
+        product.setTax(tax);
         product.setVariants(SelectVariantActivity.getVariantDataDummy(1));
         return product;
     }
