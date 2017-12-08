@@ -21,7 +21,7 @@ public class DownloadDataTask extends AsyncTask {
     private TaskCallback listener;
 
 
-    DownloadDataTask(TaskCallback listener) {
+    public DownloadDataTask(TaskCallback listener) {
         this.listener = listener;
     }
 
@@ -78,7 +78,7 @@ public class DownloadDataTask extends AsyncTask {
 
     }
 
-    interface TaskCallback {
+  public   interface TaskCallback {
         void onResultReceived(JSONObject result);
 
         void onError(String errorDescription);
