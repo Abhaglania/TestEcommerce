@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +13,10 @@ import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.anupam.testecommerce.CategoryItemsActivity;
+import com.anupam.testecommerce.ProductActivity;
 import com.anupam.testecommerce.R;
 import com.anupam.testecommerce.modals.Category;
+import com.anupam.testecommerce.modals.Product;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,14 +24,14 @@ import java.util.Random;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 
-public class HorizontalCategoriesAdaptor extends RecyclerView.Adapter<HorizontalCategoriesAdaptor.MyViewHolder> {
+public class HorizontalProductsAdaptor extends RecyclerView.Adapter<HorizontalProductsAdaptor.MyViewHolder> {
 
     Context context;
-    ArrayList<Category> categories;
+    ArrayList<Product> products;
 
-    public HorizontalCategoriesAdaptor(Context context, ArrayList<Category> categories) {
+    public HorizontalProductsAdaptor(Context context, ArrayList<Product> products) {
         this.context = context;
-        this.categories = categories;
+        this.products = products;
     }
 
     public static Drawable getDrawable(String name) {
@@ -46,7 +47,7 @@ public class HorizontalCategoriesAdaptor extends RecyclerView.Adapter<Horizontal
                 .width(40)
                 .height(40)
                 .endConfig()
-                .buildRound(character, color);
+                .buildRect(character, color);
         return drawable;
     }
 
@@ -59,15 +60,15 @@ public class HorizontalCategoriesAdaptor extends RecyclerView.Adapter<Horizontal
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Category category = categories.get(position);
+        Product category = products.get(position);
         holder.textView.setText(category.getName());
         holder.textView.setTag(category.getId());
         holder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int id = (int) view.getTag();
-                Intent intent = new Intent(context, CategoryItemsActivity.class);
-                intent.putExtra("categoryId", id);
+                Intent intent = new Intent(context, ProductActivity.class);
+                intent.putExtra("productId", id);
                 intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
@@ -84,7 +85,7 @@ public class HorizontalCategoriesAdaptor extends RecyclerView.Adapter<Horizontal
 
     @Override
     public int getItemCount() {
-        return categories.size();
+        return products.size();
     }
 
     @Override

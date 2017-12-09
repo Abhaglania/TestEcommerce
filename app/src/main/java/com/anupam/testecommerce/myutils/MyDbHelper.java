@@ -25,32 +25,18 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "ecommerce";
-    private static final String TABLE_MOST_VIEW_PRODUCTS = "most_view_products";
-    private static final String COLUMN_NAME_KEY = "id";
-    private static final String COLUMN_NAME_COUNT = "viewCount";
-    private static final String TABLE_MOST_ORDERED_PRODUCTS = "most_ordered_products";
-    private static final String TABLE_MOST_SHARED_PRODUCTS = "most_shared_products";
-    private static final String SQL_CREATE_TABLE_MVP =
-            "CREATE TABLE IF NOT EXISTS " + TABLE_MOST_VIEW_PRODUCTS +
+    private static final String TABLE_RANKINGS = "rankings";
+    private static final String COLUMN_NAME_RANKING_NAME = "name";
+    private static final String COLUMN_NAME_RANKING_ITEMS = "items";
+
+    private static final String SQL_CREATE_TABLE_RANKINGS =
+            "CREATE TABLE IF NOT EXISTS " + TABLE_RANKINGS +
                     " ( " +
-                    COLUMN_NAME_KEY + " INTEGER NOT NULL, " +
-                    COLUMN_NAME_COUNT + " INTEGER NOT NULL, " +
-                    " PRIMARY KEY ( " + COLUMN_NAME_KEY + " ) " +
+                    COLUMN_NAME_RANKING_NAME + " TEXT NOT NULL, " +
+                    COLUMN_NAME_RANKING_ITEMS + " Text NOT NULL, " +
+                    " PRIMARY KEY ( " + COLUMN_NAME_RANKING_NAME + " ) " +
                     " )";
-    private static final String SQL_CREATE_TABLE_MOP =
-            "CREATE TABLE IF NOT EXISTS " + TABLE_MOST_ORDERED_PRODUCTS +
-                    " ( " +
-                    COLUMN_NAME_KEY + " INTEGER NOT NULL, " +
-                    COLUMN_NAME_COUNT + " INTEGER NOT NULL, " +
-                    " PRIMARY KEY ( " + COLUMN_NAME_KEY + " ) " +
-                    " )";
-    private static final String SQL_CREATE_TABLE_MSP =
-            "CREATE TABLE IF NOT EXISTS " + TABLE_MOST_SHARED_PRODUCTS +
-                    " ( " +
-                    COLUMN_NAME_KEY + " INTEGER NOT NULL, " +
-                    COLUMN_NAME_COUNT + " INTEGER NOT NULL, " +
-                    " PRIMARY KEY ( " + COLUMN_NAME_KEY + " ) " +
-                    " )";
+
 
     private final String TABLE_CATEGORIES = "categories";
     private final String COLUMN_NAME_CATEGORIES_ID = "id";
@@ -106,14 +92,9 @@ public class MyDbHelper extends SQLiteOpenHelper {
     private final String SQL_DROP_TABLE_VARIANTS =
             "DROP TABLE IF EXISTS " + TABLE_VARIANTS;
 
-    private final String SQL_DROP_TABLE_MSP =
-            "DROP TABLE IF EXISTS " + TABLE_MOST_SHARED_PRODUCTS;
-
-    private final String SQL_DROP_TABLE_MOP =
-            "DROP TABLE IF EXISTS " + TABLE_MOST_ORDERED_PRODUCTS;
 
     private final String SQL_DROP_TABLE_MVP =
-            "DROP TABLE IF EXISTS " + TABLE_MOST_VIEW_PRODUCTS;
+            "DROP TABLE IF EXISTS " + TABLE_RANKINGS;
 
     public MyDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -121,10 +102,10 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(SQL_CREATE_TABLE_MOP);
-        sqLiteDatabase.execSQL(SQL_CREATE_TABLE_MVP);
+
+        sqLiteDatabase.execSQL(SQL_CREATE_TABLE_RANKINGS);
         sqLiteDatabase.execSQL(CREATE_TABLE_VARIANTS);
-        sqLiteDatabase.execSQL(SQL_CREATE_TABLE_MSP);
+
         sqLiteDatabase.execSQL(SQL_CREATE_TABLE_PRODUCTS);
         sqLiteDatabase.execSQL(SQL_CREATE_TABLE_CATEGORIES);
     }
@@ -132,10 +113,10 @@ public class MyDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         // resetDatabase();
-        sqLiteDatabase.execSQL(SQL_CREATE_TABLE_MOP);
-        sqLiteDatabase.execSQL(SQL_CREATE_TABLE_MVP);
+
+        sqLiteDatabase.execSQL(SQL_CREATE_TABLE_RANKINGS);
         sqLiteDatabase.execSQL(CREATE_TABLE_VARIANTS);
-        sqLiteDatabase.execSQL(SQL_CREATE_TABLE_MSP);
+
         sqLiteDatabase.execSQL(SQL_CREATE_TABLE_PRODUCTS);
         sqLiteDatabase.execSQL(SQL_CREATE_TABLE_CATEGORIES);
         //sqLiteDatabase.close();
@@ -155,12 +136,44 @@ public class MyDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_DROP_TABLE_CATEGORIES);
         sqLiteDatabase.execSQL(SQL_DROP_TABLE_PRODUCTS);
         sqLiteDatabase.execSQL(SQL_DROP_TABLE_VARIANTS);
-        sqLiteDatabase.execSQL(SQL_DROP_TABLE_MOP);
+
         sqLiteDatabase.execSQL(SQL_DROP_TABLE_MVP);
-        sqLiteDatabase.execSQL(SQL_DROP_TABLE_MSP);
+
         onCreate(sqLiteDatabase);
 
         sqLiteDatabase.close();
+    }
+
+    public boolean insertRankings(String name, String data) {
+
+        SQLiteDatabase sqLiteDatabase = null;
+        boolean isSuccessful = false;
+        try {
+            sqLiteDatabase = this.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_NAME_RANKING_NAME, name);
+            values.put(COLUMN_NAME_RANKING_ITEMS, data);
+
+            long newRowId;
+            newRowId = sqLiteDatabase.insert(
+                    TABLE_RANKINGS,
+                    null,
+                    values);
+
+            isSuccessful = newRowId != -1;
+        } catch (Exception e) {
+            isSuccessful = false;
+            e.printStackTrace();
+        } finally {
+            try {
+                if (sqLiteDatabase != null)
+                    sqLiteDatabase.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return isSuccessful;
     }
 
     public boolean insertCategory(Category category, JSONArray productJsonArray) {
@@ -334,6 +347,47 @@ public class MyDbHelper extends SQLiteOpenHelper {
         }
         db.close();
         return categories;
+    }
+
+    public JSONArray getRankings() throws JSONException {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] projection = {
+                COLUMN_NAME_RANKING_NAME,
+                COLUMN_NAME_RANKING_ITEMS
+        };
+
+
+        Cursor cursor = db.query(
+                TABLE_RANKINGS,                  // The table to query
+                projection,                               // The columns to return
+                null,                                // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                // The sort order
+        );
+
+        JSONArray jsonArray = new JSONArray();
+        if (cursor.moveToFirst()) {
+            do {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("name", cursor.getString(cursor.getColumnIndex(COLUMN_NAME_RANKING_NAME)));
+                jsonObject.put("items", new JSONArray(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_RANKING_ITEMS))));
+
+
+                jsonArray.put(jsonObject);
+
+            } while (cursor.moveToNext());
+        }
+
+        try {
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        db.close();
+        return jsonArray;
     }
 
     public Category getCategoryById(int id) {

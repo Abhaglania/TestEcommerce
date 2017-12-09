@@ -4,6 +4,7 @@ package com.anupam.testecommerce;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -15,6 +16,9 @@ import com.anupam.testecommerce.myutils.MyDbHelper;
 import java.util.ArrayList;
 
 public class SelectVariantActivity extends AppCompatActivity {
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +48,7 @@ public class SelectVariantActivity extends AppCompatActivity {
         return variants;
     }
 
-     private View addVariantToView(final ProductVariant variant) throws Exception {
+    private View addVariantToView(final ProductVariant variant) throws Exception {
         LayoutInflater li = LayoutInflater.from(getApplicationContext());
         View view = li.inflate(R.layout.product_variant, null);
         TextView textViewVariantPrice = (TextView) view.findViewById(R.id.textViewVariantPrice);
