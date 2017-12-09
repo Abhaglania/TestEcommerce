@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/selectableItemBackground"
+    android:elevation="5dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -42,11 +43,7 @@
             android:text="Size"
             android:textColor="#000" />
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="?android:attr/selectableItemBackground"
-            app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
     </LinearLayout>
 
     <View

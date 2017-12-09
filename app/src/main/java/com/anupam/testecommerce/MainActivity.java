@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements DownloadDataTask.
                 .inflate(R.layout.category_item, null, false);
         MyDbHelper myDbHelper = new MyDbHelper(getApplicationContext());
         RecyclerView recyclerView = (RecyclerView) itemView.findViewById(R.id.categories);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         HorizontalCategoriesAdaptor rAdapter = new HorizontalCategoriesAdaptor(getApplicationContext(), myDbHelper.getCategories());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(rAdapter);
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements DownloadDataTask.
                 TextView textView = (TextView) itemView.findViewById(R.id.textViewName);
                 textView.setText(name);
                 RecyclerView recyclerView = (RecyclerView) itemView.findViewById(R.id.categories);
-                recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+                recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                 HorizontalProductsAdaptor rAdapter = new HorizontalProductsAdaptor(getApplicationContext(), products);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(rAdapter);
