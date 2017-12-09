@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements DownloadDataTask.
                     int id = rankingItem.getInt("id");
                     products.add(myDbHelper.getProductById(id));
                 }
+
                 TextView textView = (TextView) itemView.findViewById(R.id.textViewName);
                 textView.setText(name);
                 RecyclerView recyclerView = (RecyclerView) itemView.findViewById(R.id.categories);
