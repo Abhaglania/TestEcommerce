@@ -18,16 +18,16 @@ import org.json.JSONObject;
 
 public class ProductActivity extends AppCompatActivity {
     Product product;
+    int productId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
-        int productId = getIntent().getIntExtra("productId", 0);
+        productId = getIntent().getIntExtra("productId", 0);
         product = getProduct(productId);
         addProductToView();
     }
-
 
 
     private void addProductToView() {
@@ -60,7 +60,7 @@ public class ProductActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), SelectVariantActivity.class);
-                intent.putExtra("productId", 1);
+                intent.putExtra("productId", productId);
                 startActivityForResult(intent, 101);
             }
         });
@@ -96,7 +96,7 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 101&&resultCode==200) {
+        if (requestCode == 101 && resultCode == 200) {
             try {
                 ProductVariant variant = (ProductVariant) data.getSerializableExtra("variant");
                 addSelectedVariant(variant);

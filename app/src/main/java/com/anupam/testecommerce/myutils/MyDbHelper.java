@@ -336,6 +336,54 @@ public class MyDbHelper extends SQLiteOpenHelper {
         return categories;
     }
 
+    public Category getCategoryById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] projection = {
+                COLUMN_NAME_CATEGORIES_ID,
+                COLUMN_NAME_CATEGORIES_NAME,
+                COLUMN_NAME_CATEGORIES_CHILD_CATEGORIES
+        };
+        String condition = COLUMN_NAME_PRODUCTS_ID + " ==  '" + id + "'";
+        String sortOrder =
+                COLUMN_NAME_CATEGORIES_ID + " DESC";
+
+        Cursor cursor = db.query(
+                TABLE_CATEGORIES,                  // The table to query
+                projection,                               // The columns to return
+                condition,                                // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+
+        if (cursor.moveToFirst()) {
+
+            Category category = new Category();
+            category.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_CATEGORIES_ID)));
+            category.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_CATEGORIES_NAME)));
+            try {
+                JSONArray jsonArray = new JSONArray(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_CATEGORIES_CHILD_CATEGORIES)));
+                category.setChild(jsonArray);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return category;
+
+
+        }
+
+        try {
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        db.close();
+        return new Category();
+    }
+
     public Product getProductById(int productId) {
         SQLiteDatabase db = this.getReadableDatabase();
 
